@@ -1,0 +1,15 @@
+name: RPGBeta2
+version: '1.0-SNAPSHOT'
+main: org.SJYPlugin.rPGBeta2.RPGBeta2
+api-version: '1.20'
+depend:
+  - MythicMobs
+  - MagicSpells
+
+commands:
+  standspawn:
+    description: "Spawn Stand"
+    usage: "/standspawn"
+  stats:
+    description: "stats"
+    usage: "/stats <player> <stat> <value>"
