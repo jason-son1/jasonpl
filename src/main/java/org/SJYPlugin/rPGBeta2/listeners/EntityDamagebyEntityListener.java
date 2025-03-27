@@ -4,6 +4,7 @@ import org.SJYPlugin.rPGBeta2.control.damagecontrol.evp.PlainHitApplyEVP;
 import org.SJYPlugin.rPGBeta2.control.damagecontrol.plainhit.PlainHitSpeed;
 import org.SJYPlugin.rPGBeta2.control.damagecontrol.pve.PlainHitApplyPVE;
 import org.SJYPlugin.rPGBeta2.control.hpcontrol.HPControl;
+import org.SJYPlugin.rPGBeta2.data.damage.DamageModifiers;
 import org.SJYPlugin.rPGBeta2.util.persistantdata.DamageCausePersistantData;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -48,7 +49,10 @@ public class EntityDamagebyEntityListener implements Listener {
             } else {
                 if(plainHitSpeed.PlayerPlainHitSpeed(attacker)) {
                     event.setDamage(0);
-                    PlainHitApplyPVE.getInstance().PlainHitDamagePVE(attacker, (LivingEntity) event.getEntity(), "NULL", 0, "NULL");
+                    PlainHitApplyPVE.getInstance().PlainHitDamagePVE(new DamageModifiers(attacker,
+                            entity, 0, 100, "ATTACK", "NORMAL",
+                            "NORMAL", "PHYSICS", false));
+
                 } else {
                     event.setCancelled(true);
                 }
@@ -56,7 +60,9 @@ public class EntityDamagebyEntityListener implements Listener {
         } else {
             if(plainHitSpeed.PlayerPlainHitSpeed(attacker)) {
                 event.setDamage(0);
-                PlainHitApplyPVE.getInstance().PlainHitDamagePVE(attacker, (LivingEntity) event.getEntity(), "NULL", 0, "NULL");
+                PlainHitApplyPVE.getInstance().PlainHitDamagePVE(new DamageModifiers(attacker,
+                        entity, 0, 100, "ATTACK", "NORMAL",
+                        "NORMAL", "PHYSICS", false));
             } else {
                 event.setCancelled(true);
             }
@@ -73,13 +79,17 @@ public class EntityDamagebyEntityListener implements Listener {
             } else {
                 if(plainHitSpeed.PlayerPlainHitSpeed(attacker)) {
                     event.setDamage(0);
-                    PlainHitApplyPVE.getInstance().PlainHitDamagePVE(attacker, (LivingEntity) event.getEntity(), "NULL", 0, "NULL");
+                    PlainHitApplyPVE.getInstance().PlainHitDamagePVE(new DamageModifiers(attacker,
+                            offender, 0, 100, "ATTACK", "NORMAL",
+                            "NORMAL", "PHYSICS", false));
                 }
             }
         } else {
             if(plainHitSpeed.PlayerPlainHitSpeed(attacker)) {
                 event.setDamage(0);
-                PlainHitApplyPVE.getInstance().PlainHitDamagePVE(attacker, (LivingEntity) event.getEntity(), "NULL", 0, "NULL");
+                PlainHitApplyPVE.getInstance().PlainHitDamagePVE(new DamageModifiers(attacker,
+                        offender, 0, 100, "ATTACK", "NORMAL",
+                        "NORMAL", "PHYSICS", false));
             }
         }
     }
@@ -93,11 +103,15 @@ public class EntityDamagebyEntityListener implements Listener {
                 }
             } else {
                 event.setDamage(0);
-                PlainHitApplyEVP.getInstance().PlainHitDamageEVP(attacker, (Player) event.getEntity(), "NULL", 0, "NULL");
+                PlainHitApplyEVP.getInstance().PlainHitDamageEVP(new DamageModifiers(attacker,
+                        entity, 0, 100, "ATTACK", "NORMAL",
+                        "NORMAL", "PHYSICS", false));
             }
         } else {
             event.setDamage(0);
-            PlainHitApplyEVP.getInstance().PlainHitDamageEVP(attacker, (Player) event.getEntity(), "NULL", 0, "NULL");
+            PlainHitApplyEVP.getInstance().PlainHitDamageEVP(new DamageModifiers(attacker,
+                    entity, 0, 100, "ATTACK", "NORMAL",
+                    "NORMAL", "PHYSICS", false));
         }
     }
 

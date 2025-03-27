@@ -75,8 +75,8 @@ public class FireAttControl implements Listener {
                         UUID causeEntityUUID = latestData.getCauseEntity();
                         LivingEntity causeEntity = (LivingEntity) Bukkit.getEntity(causeEntityUUID);
 
-                        fireDotDamaging.FireDotDamage(event.getOffender(), causeEntity,
-                                20, 5, "FIREATTRIBUTEDAMAGE", "ATTACK", 10);
+//                        fireDotDamaging.FireDotDamage(event.getOffender(), causeEntity,
+//                                20, 5, "FIREATTRIBUTEDAMAGE", "ATTACK", 10);
                     }
                 }
             } else {

@@ -3,6 +3,7 @@ package org.SJYPlugin.rPGBeta2.control.damagecontrol.pvp;
 import org.SJYPlugin.rPGBeta2.control.hpcontrol.HPControl;
 import org.SJYPlugin.rPGBeta2.customevents.damage.PlayerDieEvent;
 import org.SJYPlugin.rPGBeta2.customevents.damage.RPGDamageEvent;
+import org.SJYPlugin.rPGBeta2.data.damage.DamageModifiers;
 import org.SJYPlugin.rPGBeta2.data.playerdata.damagedata.PlayerDamageData;
 import org.SJYPlugin.rPGBeta2.util.config.ConfigUtilStat2;
 import org.SJYPlugin.rPGBeta2.util.persistantdata.DamageCausePersistantData;
@@ -22,8 +23,10 @@ public class DamageApplyPVPmain {
     PlayerDamageData playerDamageData = PlayerDamageData.getInstance();
 
 
-    public void DamagePVP(Player attacker, Player offender, double FinalDamage, String BaseType,
-                          String StemType, String RootType, String Attribute, boolean isCritical) {
+    public void DamagePVP(DamageModifiers damageModifiers) {
+
+        Player attacker = damageModifiers.getAttackerPlayer();
+        Player offender = damageModifiers.getOffenderPlayer();
 
         HPControl.getInstance().HealthSetPlayer(offender);
 
@@ -33,16 +36,16 @@ public class DamageApplyPVPmain {
         double VirtualMaxHealth = configUtilStat2.getMaxHP(offender);
         double VirtualHealth = configUtilStat2.getHP(offender);
 
-        RPGDamageEvent event = new RPGDamageEvent(attacker, offender, FinalDamage, BaseType, StemType, RootType, Attribute, isCritical);
+        RPGDamageEvent event = new RPGDamageEvent(damageModifiers);
         Bukkit.getPluginManager().callEvent(event);
 
-        FinalDamage = playerDamageData.playerShiledPass(FinalDamage, offender);
+        double FinalDamage = playerDamageData.playerShiledPass(damageModifiers);
 
         if(FinalDamage != 0) {
             if(FinalDamage >= VirtualHealth) {
                 configUtilStat2.HPChange(offender, (double) 0, (double) -1*(VirtualHealth));
                 offender.setHealth(0);
-                PlayerDieEvent playerDieEvent = new PlayerDieEvent(attacker, offender, FinalDamage, BaseType, StemType, RootType, Attribute);
+                PlayerDieEvent playerDieEvent = new PlayerDieEvent(damageModifiers);
                 Bukkit.getPluginManager().callEvent(playerDieEvent);
                 offender.setKiller(attacker);
                 offender.setLastDamage(RealHealth);
@@ -65,8 +68,7 @@ public class DamageApplyPVPmain {
 
     private boolean isProcessingPlainDamage = false;
 
-    public void ETCDamagePVP(Player attacker, Player offender, double FinalDamage, String BaseType,
-                             String StemType, String RootType, String Attribute, boolean isCritical) {
+    public void ETCDamagePVP(DamageModifiers damageModifiers) {
         if(isProcessingPlainDamage) {
             return;
         }
@@ -74,6 +76,10 @@ public class DamageApplyPVPmain {
         isProcessingPlainDamage = true;
 
         try {
+
+            Player attacker = damageModifiers.getAttackerPlayer();
+            Player offender = damageModifiers.getOffenderPlayer();
+
             HPControl.getInstance().HealthSetPlayer(offender);
 
             double RealMaxHealth = offender.getHealthScale();
@@ -82,10 +88,10 @@ public class DamageApplyPVPmain {
             double VirtualMaxHealth = configUtilStat2.getMaxHP(offender);
             double VirtualHealth = configUtilStat2.getHP(offender);
 
-            RPGDamageEvent event = new RPGDamageEvent(attacker, offender, FinalDamage, BaseType, StemType, RootType, Attribute, isCritical);
+            RPGDamageEvent event = new RPGDamageEvent(damageModifiers);
             Bukkit.getPluginManager().callEvent(event);
 
-            FinalDamage = playerDamageData.playerShiledPass(FinalDamage, offender);
+            double FinalDamage = playerDamageData.playerShiledPass(damageModifiers);
 
             if(FinalDamage != 0) {
                 if(FinalDamage >= VirtualHealth) {

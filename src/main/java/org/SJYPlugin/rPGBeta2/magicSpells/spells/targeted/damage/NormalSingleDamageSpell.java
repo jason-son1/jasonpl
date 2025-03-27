@@ -13,6 +13,9 @@ import org.SJYPlugin.rPGBeta2.control.damagecontrol.pve.DamageApplyPVEmain;
 import org.SJYPlugin.rPGBeta2.control.damagecontrol.pve.DamageComputePVEmain;
 import org.SJYPlugin.rPGBeta2.control.damagecontrol.pvp.DamageApplyPVPmain;
 import org.SJYPlugin.rPGBeta2.control.damagecontrol.pvp.DamageComputePVPmain;
+import org.SJYPlugin.rPGBeta2.data.damage.DamageData;
+import org.SJYPlugin.rPGBeta2.data.damage.DamageModifiers;
+import org.SJYPlugin.rPGBeta2.data.damage.PutDamageModifiers;
 import org.SJYPlugin.rPGBeta2.data.playerdata.damagedata.PlayerDamageData;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -25,6 +28,7 @@ public class NormalSingleDamageSpell extends TargetedSpell implements TargetedEn
     DamageApplyPVPmain damageApplyPVPmain = DamageApplyPVPmain.getInstance();
     DamageApplyPVEmain damageApplyPVEmain = DamageApplyPVEmain.getInstance();
     PlayerDamageData playerDamageData = PlayerDamageData.getInstance();
+    PutDamageModifiers putDamageModifiers = PutDamageModifiers.getInstance();
 
     private final ConfigData<String> DamageStemType;
 
@@ -64,29 +68,32 @@ public class NormalSingleDamageSpell extends TargetedSpell implements TargetedEn
     private CastResult SingleDamage(SpellData data) {
         EntityDamageEvent.DamageCause damageCause = EntityDamageEvent.DamageCause.ENTITY_ATTACK;
 
+        DamageModifiers damageModifiers = putDamageModifiers.putDamageModifiers(DamageData.getInstance().getDefaultDamageModifiers(),
+                data.caster(), data.target(), 0, DamageBaseType.get(data), DamageStemType.get(data), "NORMAL",
+                DamageAttribute.get(data), false);
+
         boolean isCritical = false;
 
         if(!data.target().isValid()) {
             return noTarget(data);
         }
-        double VirtualFinalDamage;
 
         if(data.target() instanceof Player) {
             if(data.caster() instanceof Player) {
                 Player offender = (Player) data.target();
                 Player attacker = (Player) data.caster();
+                damageModifiers.setAttacker(attacker);
+                damageModifiers.setOffender(offender);
                 if(this.ForceCritical.get(data)) {
                     isCritical = true;
                 } else {
-                    isCritical = playerDamageData.OnCritical(attacker);
+                    isCritical = playerDamageData.OnCritical(damageModifiers);
                 }
-                VirtualFinalDamage = damageComputePVPmain.FinalDamage((Player) attacker, offender,
-                        DamageBaseType.get(data), DamageMag.get(data), "NORMAL", DamageStemType.get(data),
-                        DamageAttribute.get(data), isCritical);
-                SpellApplyDamageEvent event = new SpellApplyDamageEvent((Spell) this, data.caster(), data.target(), VirtualFinalDamage, damageCause, "");
+                damageModifiers.setCritical(isCritical);
+                damageModifiers.setFinalDamage(damageComputePVPmain.FinalDamage(damageModifiers));
+                SpellApplyDamageEvent event = new SpellApplyDamageEvent((Spell) this, data.caster(), data.target(), damageModifiers.getFinalDamage(), damageCause, "");
                 event.callEvent();
-                damageApplyPVPmain.DamagePVP(attacker, offender, VirtualFinalDamage, DamageBaseType.get(data), DamageStemType.get(data),
-                        "NORMAL", DamageAttribute.get(data), isCritical);
+                damageApplyPVPmain.DamagePVP(damageModifiers);
             } else {
 
             }
@@ -94,17 +101,18 @@ public class NormalSingleDamageSpell extends TargetedSpell implements TargetedEn
             if(data.caster() instanceof Player) {
                 LivingEntity offender = data.target();
                 Player attacker = (Player) data.caster();
+                damageModifiers.setAttacker(attacker);
+                damageModifiers.setOffender(offender);
                 if(this.ForceCritical.get(data)) {
                     isCritical = true;
                 } else {
-                    isCritical = playerDamageData.OnCritical(attacker);
+                    isCritical = playerDamageData.OnCritical(damageModifiers);
                 }
-                VirtualFinalDamage = damageComputePVEmain.FinalDamage(attacker, offender, DamageBaseType.get(data), DamageMag.get(data),
-                        "NORMAL", DamageStemType.get(data), DamageAttribute.get(data), isCritical);
-                SpellApplyDamageEvent event = new SpellApplyDamageEvent((Spell) this, data.caster(), data.target(), VirtualFinalDamage, damageCause, "");
+                damageModifiers.setCritical(isCritical);
+                damageModifiers.setFinalDamage(damageComputePVPmain.FinalDamage(damageModifiers));
+                SpellApplyDamageEvent event = new SpellApplyDamageEvent((Spell) this, data.caster(), data.target(), damageModifiers.getFinalDamage(), damageCause, "");
                 event.callEvent();
-                damageApplyPVEmain.DamagePVE_Mythic(attacker, offender, VirtualFinalDamage, DamageBaseType.get(data), DamageStemType.get(data),
-                        "NORMAL", DamageAttribute.get(data), isCritical);
+                damageApplyPVEmain.DamagePVE_Mythic(damageModifiers);
             } else {
 
             }

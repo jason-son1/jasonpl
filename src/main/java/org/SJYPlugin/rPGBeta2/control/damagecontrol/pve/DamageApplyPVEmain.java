@@ -4,6 +4,7 @@ import io.lumine.mythic.api.mobs.MythicMob;
 import org.SJYPlugin.rPGBeta2.control.hpcontrol.HPControl;
 import org.SJYPlugin.rPGBeta2.control.hpcontrol.MythicControl;
 import org.SJYPlugin.rPGBeta2.customevents.damage.RPGDamageEvent;
+import org.SJYPlugin.rPGBeta2.data.damage.DamageModifiers;
 import org.SJYPlugin.rPGBeta2.data.mobdata.damagedata.MythicMobDamageData;
 import org.SJYPlugin.rPGBeta2.mythicMobs.mob.control.MobDataControlGet;
 import org.SJYPlugin.rPGBeta2.mythicMobs.mob.mobdata.MobData;
@@ -29,9 +30,11 @@ public class DamageApplyPVEmain {
     MythicMobDamageData mythicMobDamageData = MythicMobDamageData.getInstance();
 
 
-    public void DamagePVE_Mythic(Player attacker, LivingEntity offender, double FinalDamage,
-                                 String BaseType, String StemType, String RootType, String Attribute, boolean isCritical) {
+    public void DamagePVE_Mythic(DamageModifiers damageModifiers) {
         try {
+
+            Player attacker = damageModifiers.getAttackerPlayer();
+            LivingEntity offender = damageModifiers.getOffender();
 
             hpControl.HealthSetEntity_Mythic(offender);
 
@@ -45,10 +48,11 @@ public class DamageApplyPVEmain {
                 double RealMaxHealth = offender.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH).getBaseValue();
                 double RealCurrHealth = offender.getHealth();
 
-                RPGDamageEvent event = new RPGDamageEvent(attacker, offender, FinalDamage, BaseType, StemType, RootType, Attribute, isCritical);
+                RPGDamageEvent event = new RPGDamageEvent(damageModifiers);
                 Bukkit.getPluginManager().callEvent(event);
 
-                FinalDamage = mythicMobDamageData.MobShiledPass(FinalDamage, offender);
+
+                double FinalDamage = mythicMobDamageData.MobShiledPass(damageModifiers);
 
                 if(FinalDamage != 0) {
                     if(FinalDamage >= VirtualHealth) {
@@ -76,8 +80,7 @@ public class DamageApplyPVEmain {
 
     private boolean isProcessingPlainDamage = false;
 
-    public void ETCDamagePVE(Player attacker, LivingEntity offender, double FinalDamage,
-                             String BaseType, String StemType, String RootType, String Attribute, boolean isCritical) {
+    public void ETCDamagePVE(DamageModifiers damageModifiers) {
         if(isProcessingPlainDamage) {
             return;
         }
@@ -85,6 +88,9 @@ public class DamageApplyPVEmain {
         isProcessingPlainDamage = true;
 
         try {
+
+            Player attacker = damageModifiers.getAttackerPlayer();
+            LivingEntity offender = damageModifiers.getOffender();
 
             hpControl.HealthSetEntity_Mythic(offender);
 
@@ -98,10 +104,10 @@ public class DamageApplyPVEmain {
                 double RealMaxHealth = offender.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH).getBaseValue();
                 double RealCurrHealth = offender.getHealth();
 
-                RPGDamageEvent event = new RPGDamageEvent(attacker, offender, FinalDamage, BaseType, StemType, RootType, Attribute, isCritical);
+                RPGDamageEvent event = new RPGDamageEvent(damageModifiers);
                 Bukkit.getPluginManager().callEvent(event);
 
-                FinalDamage = mythicMobDamageData.MobShiledPass(FinalDamage, offender);
+                double FinalDamage = mythicMobDamageData.MobShiledPass(damageModifiers);
 
                 if(FinalDamage != 0) {
                     if(FinalDamage >= VirtualHealth) {

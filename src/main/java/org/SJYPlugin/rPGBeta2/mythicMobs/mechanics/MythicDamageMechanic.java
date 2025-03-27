@@ -12,6 +12,9 @@ import io.lumine.mythic.core.utils.annotations.MythicMechanic;
 import org.SJYPlugin.rPGBeta2.control.damagecontrol.evp.DamageApplyEVPmain;
 import org.SJYPlugin.rPGBeta2.control.damagecontrol.evp.DamageComputeEVPmain;
 import org.SJYPlugin.rPGBeta2.control.hpcontrol.HPControl;
+import org.SJYPlugin.rPGBeta2.data.damage.DamageData;
+import org.SJYPlugin.rPGBeta2.data.damage.DamageModifiers;
+import org.SJYPlugin.rPGBeta2.data.damage.PutDamageModifiers;
 import org.SJYPlugin.rPGBeta2.util.config.ConfigUtilStat2;
 import org.SJYPlugin.rPGBeta2.util.persistantdata.DamageCausePersistantData;
 import org.bukkit.entity.LivingEntity;
@@ -25,6 +28,7 @@ public class MythicDamageMechanic extends DamagingMechanic implements ITargetedE
     DamageComputeEVPmain damageComputeEVPmain = DamageComputeEVPmain.getInstance();
     DamageApplyEVPmain damageApplyEVPmain = DamageApplyEVPmain.getInstance();
     DamageCausePersistantData damageCausePersistantData = DamageCausePersistantData.getInstance();
+    PutDamageModifiers putDamageModifiers = PutDamageModifiers.getInstance();
 
     private final int DamageMag;
     private final String DamageBaseType;
@@ -57,14 +61,20 @@ public class MythicDamageMechanic extends DamagingMechanic implements ITargetedE
                 .isLiving() && target.getHealth() <= 0.0D))
             return SkillResult.INVALID_TARGET;
 
+        DamageModifiers damageModifiers = putDamageModifiers.putDamageModifiers(DamageData.getInstance().getDefaultDamageModifiers(),
+                null, null, 0,
+                DamageBaseType, DamageStemType, DamageRootType, DamageAttribute, false);
+
         double VirtualFinalDamage;
         if(target.isLiving()) {
             LivingEntity livingEntity = (LivingEntity) target.getBukkitEntity();
             if(target.isPlayer()) {
                 Player offender = (Player) livingEntity;
                 LivingEntity attacker = (LivingEntity) data.getCaster().getEntity().getBukkitEntity();
-                VirtualFinalDamage = damageComputeEVPmain.FinalDamage(attacker, offender, DamageBaseType, DamageMag, DamageRootType, DamageAttribute, DamageAttribute);
-                double RealDamage = damageApplyEVPmain.DamageEVP(attacker, offender, VirtualFinalDamage, DamageBaseType, DamageStemType, DamageRootType, DamageAttribute);
+                damageModifiers.setAttacker(attacker);
+                damageModifiers.setOffender(offender);
+                damageModifiers.setFinalDamage(damageComputeEVPmain.FinalDamage(damageModifiers));
+                double RealDamage = damageApplyEVPmain.DamageEVP(damageModifiers);
                 if(RealDamage > 0.0D) {
                     damageCausePersistantData.addData(attacker, "CustomDamageCause_EVP", "SKILL_DAMAGE");
                     DamageApplying(data, target, RealDamage);

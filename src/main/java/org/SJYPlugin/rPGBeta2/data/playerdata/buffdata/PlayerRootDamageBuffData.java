@@ -1,6 +1,6 @@
 package org.SJYPlugin.rPGBeta2.data.playerdata.buffdata;
 
-import org.SJYPlugin.rPGBeta2.data.DamageData;
+import org.SJYPlugin.rPGBeta2.data.damage.DamageData;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

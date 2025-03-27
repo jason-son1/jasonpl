@@ -1,5 +1,6 @@
 package org.SJYPlugin.rPGBeta2.control.damagecontrol.pvp;
 
+import org.SJYPlugin.rPGBeta2.data.damage.DamageModifiers;
 import org.SJYPlugin.rPGBeta2.data.playerdata.damagedata.PlayerDamageData;
 import org.bukkit.entity.Player;
 
@@ -15,12 +16,10 @@ public class PlainHitApplyPVP {
     DamageComputePVPmain damageComputePVPmain = new DamageComputePVPmain();
     PlayerDamageData playerDamageData = PlayerDamageData.getInstance();
 
-    public void PlainHitDamagePVP(Player attacker, Player offender, String BaseType, Integer mag, String Attribute) {
-        boolean isCritical = playerDamageData.OnCritical(attacker);
-        double FinalDamage = damageComputePVPmain.FinalDamage(attacker, offender, "ATTACK",
-                100, "NORMAL", "NORMAL", "PHYSICS", isCritical);
-        damageApplyPVPmain.ETCDamagePVP(attacker, offender, FinalDamage,
-                "ATTACK", "NORMAL", "NORMAL", "PHYSICS", isCritical);
+    public void PlainHitDamagePVP(DamageModifiers damageModifiers) {
+        boolean isCritical = playerDamageData.OnCritical(damageModifiers);
+        double FinalDamage = damageComputePVPmain.FinalDamage(damageModifiers);
+        damageApplyPVPmain.ETCDamagePVP(damageModifiers);
     }
 
 }

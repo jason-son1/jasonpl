@@ -3,6 +3,7 @@ package org.SJYPlugin.rPGBeta2.control.damagecontrol.dot;
 import org.SJYPlugin.rPGBeta2.RPGBeta2;
 import org.SJYPlugin.rPGBeta2.control.damagecontrol.pve.DamageApplyPVEmain;
 import org.SJYPlugin.rPGBeta2.control.damagecontrol.pvp.DamageApplyPVPmain;
+import org.SJYPlugin.rPGBeta2.data.damage.DamageModifiers;
 import org.SJYPlugin.rPGBeta2.data.generaldata.debuffdata.DotDamageDeBuff;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -20,10 +21,15 @@ public class DotDamageApply {
     DamageApplyPVPmain damageApplyPVPmain = DamageApplyPVPmain.getInstance();
     DamageApplyPVEmain damageApplyPVEmain = DamageApplyPVEmain.getInstance();
 
-    public void DotDamageApply(LivingEntity attacker, LivingEntity offender, double FinalDamage, String BaseType,
-                               String StemType, String RootType, String Attribute, boolean isCritical,
+    public void DotDamageApply(DamageModifiers damageModifiers,
                                int duration, int interval, String DotName) {
+        LivingEntity attacker = damageModifiers.getAttacker();
+        LivingEntity offender = damageModifiers.getOffender();
         if(offender.isDead() || offender == null) {
+            return;
+        }
+
+        if(attacker == null) {
             return;
         }
 
@@ -40,7 +46,7 @@ public class DotDamageApply {
                         return;
                     }
                     if(dotDamageDeBuff.getBuffData(offender).containsKey(DotName)) {
-                        damageApplyPVPmain.DamagePVP((Player) attacker, (Player) offender, FinalDamage, BaseType, StemType, RootType, Attribute, isCritical);
+                        damageApplyPVPmain.DamagePVP(damageModifiers);
                     } else {
                         this.cancel();
                         return;
@@ -61,7 +67,7 @@ public class DotDamageApply {
                         return;
                     }
                     if(dotDamageDeBuff.getBuffData(offender).containsKey(DotName)) {
-                        damageApplyPVEmain.DamagePVE_Mythic((Player) attacker, offender, FinalDamage, BaseType, StemType, RootType, Attribute, isCritical);
+                        damageApplyPVEmain.DamagePVE_Mythic(damageModifiers);
                     } else {
                         this.cancel();
                         return;

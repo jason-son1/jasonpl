@@ -91,79 +91,80 @@ public class DiffusionDamageSpell extends TargetedSpell implements TargetedLocat
             if (info.noTarget()) return noTarget(info);
             data = info.spellData();
         }
-        return DiffusionDamage(data) ? new CastResult(PostCastAction.HANDLE_NORMALLY, data) : noTarget(data);
+        return castAtLocation(data);
+//        return DiffusionDamage(data) ? new CastResult(PostCastAction.HANDLE_NORMALLY, data) : noTarget(data);
     }
 
-    private boolean DiffusionDamage(SpellData data) {
-        EntityDamageEvent.DamageCause damageCause = EntityDamageEvent.DamageCause.ENTITY_ATTACK;
-
-        Map<LivingEntity, Location> targets = rangeTargetData.getTargets(data, SpellSourceInCenter.get(data), true, FailIfNoTargets.get(data),
-                MaxTargets.get(data), VRadius.get(data), HRadius.get(data), 0, 0);
-
-        boolean isCritical = false;
-
-        if(!data.target().isValid()) {
-            return false;
-        }
-
-        for(LivingEntity target : targets.keySet()) {
-            if(target.isDead() || !validTargetList.canTarget(data.caster(), target)) {
-                continue;
-            }
-            if(data.caster() instanceof Player) {
-                if(target instanceof Player) {
-                    Player offender = (Player) target;
-                    Player attacker = (Player) data.caster();
-
-                    if(this.ForceCritical.get(data)) {
-                        isCritical = true;
-                    } else {
-                        isCritical = playerDamageData.OnCritical(attacker);
-                    }
-                    double DistributeValue = DiffusionValue(data, target, DistributeStength.get(data),
-                            (Math.sqrt(Math.pow(VRadius.get(data), 2) + Math.pow(HRadius.get(data), 2))));
-                    double VirtualFinalDamage = damageComputePVPmain.FinalDamage((Player) attacker, offender,
-                            DamageBaseType.get(data), DamageMag.get(data), "SPREAD", DamageStemType.get(data),
-                            DamageAttribute.get(data), isCritical) * DistributeValue;
-                    SpellApplyDamageEvent event = new SpellApplyDamageEvent((Spell) this, data.caster(), target, VirtualFinalDamage, damageCause, "");
-                    event.callEvent();
-                    damageApplyPVPmain.DamagePVP(attacker, offender, VirtualFinalDamage, DamageBaseType.get(data), DamageStemType.get(data),
-                            "SPREAD", DamageAttribute.get(data), isCritical);
-
-                    return true;
-                } else {
-                    LivingEntity offender = target;
-                    Player attacker = (Player) data.caster();
-                    if(this.ForceCritical.get(data)) {
-                        isCritical = true;
-                    } else {
-                        isCritical = playerDamageData.OnCritical(attacker);
-                    }
-                    double DistributeValue = DiffusionValue(data, target, DistributeStength.get(data),
-                            (Math.sqrt(Math.pow(VRadius.get(data), 2) + Math.pow(HRadius.get(data), 2))));
-                    double VirtualFinalDamage = damageComputePVEmain.FinalDamage(attacker, offender, DamageBaseType.get(data), DamageMag.get(data),
-                            "SPREAD", DamageStemType.get(data), DamageAttribute.get(data), isCritical) * DistributeValue;
-                    SpellApplyDamageEvent event = new SpellApplyDamageEvent((Spell) this, data.caster(), target, VirtualFinalDamage, damageCause, "");
-                    event.callEvent();
-                    damageApplyPVEmain.DamagePVE_Mythic(attacker, offender, VirtualFinalDamage, DamageBaseType.get(data), DamageStemType.get(data),
-                            "SPREAD", DamageAttribute.get(data), isCritical);
-
-                    return true;
-                }
-            } else {
-                return false;
-            }
-        }
-        playSpellEffects(data);
-        return true;
-    }
-
-    private static final double DistributeCONSTANT = 5.0D;
-
-    private double DiffusionValue(SpellData data, LivingEntity target, double distributeStrength, double Radius) {
-        double distanceRatio = data.location().distance(target.getLocation()) / Radius;
-        double ValueRatio = 1 - (1/(Math.exp(-(distanceRatio - 1) * DistributeCONSTANT) + 1));
-        return ValueRatio;
-    }
+//    private boolean DiffusionDamage(SpellData data) {
+//        EntityDamageEvent.DamageCause damageCause = EntityDamageEvent.DamageCause.ENTITY_ATTACK;
+//
+//        Map<LivingEntity, Location> targets = rangeTargetData.getTargets(data, SpellSourceInCenter.get(data), true, FailIfNoTargets.get(data),
+//                MaxTargets.get(data), VRadius.get(data), HRadius.get(data), 0, 0);
+//
+//        boolean isCritical = false;
+//
+//        if(!data.target().isValid()) {
+//            return false;
+//        }
+//
+//        for(LivingEntity target : targets.keySet()) {
+//            if(target.isDead() || !validTargetList.canTarget(data.caster(), target)) {
+//                continue;
+//            }
+//            if(data.caster() instanceof Player) {
+//                if(target instanceof Player) {
+//                    Player offender = (Player) target;
+//                    Player attacker = (Player) data.caster();
+//
+//                    if(this.ForceCritical.get(data)) {
+//                        isCritical = true;
+//                    } else {
+//                        isCritical = playerDamageData.OnCritical(attacker);
+//                    }
+//                    double DistributeValue = DiffusionValue(data, target, DistributeStength.get(data),
+//                            (Math.sqrt(Math.pow(VRadius.get(data), 2) + Math.pow(HRadius.get(data), 2))));
+//                    double VirtualFinalDamage = damageComputePVPmain.FinalDamage((Player) attacker, offender,
+//                            DamageBaseType.get(data), DamageMag.get(data), "SPREAD", DamageStemType.get(data),
+//                            DamageAttribute.get(data), isCritical) * DistributeValue;
+//                    SpellApplyDamageEvent event = new SpellApplyDamageEvent((Spell) this, data.caster(), target, VirtualFinalDamage, damageCause, "");
+//                    event.callEvent();
+//                    damageApplyPVPmain.DamagePVP(attacker, offender, VirtualFinalDamage, DamageBaseType.get(data), DamageStemType.get(data),
+//                            "SPREAD", DamageAttribute.get(data), isCritical);
+//
+//                    return true;
+//                } else {
+//                    LivingEntity offender = target;
+//                    Player attacker = (Player) data.caster();
+//                    if(this.ForceCritical.get(data)) {
+//                        isCritical = true;
+//                    } else {
+//                        isCritical = playerDamageData.OnCritical(attacker);
+//                    }
+//                    double DistributeValue = DiffusionValue(data, target, DistributeStength.get(data),
+//                            (Math.sqrt(Math.pow(VRadius.get(data), 2) + Math.pow(HRadius.get(data), 2))));
+//                    double VirtualFinalDamage = damageComputePVEmain.FinalDamage(attacker, offender, DamageBaseType.get(data), DamageMag.get(data),
+//                            "SPREAD", DamageStemType.get(data), DamageAttribute.get(data), isCritical) * DistributeValue;
+//                    SpellApplyDamageEvent event = new SpellApplyDamageEvent((Spell) this, data.caster(), target, VirtualFinalDamage, damageCause, "");
+//                    event.callEvent();
+//                    damageApplyPVEmain.DamagePVE_Mythic(attacker, offender, VirtualFinalDamage, DamageBaseType.get(data), DamageStemType.get(data),
+//                            "SPREAD", DamageAttribute.get(data), isCritical);
+//
+//                    return true;
+//                }
+//            } else {
+//                return false;
+//            }
+//        }
+//        playSpellEffects(data);
+//        return true;
+//    }
+//
+//    private static final double DistributeCONSTANT = 5.0D;
+//
+//    private double DiffusionValue(SpellData data, LivingEntity target, double distributeStrength, double Radius) {
+//        double distanceRatio = data.location().distance(target.getLocation()) / Radius;
+//        double ValueRatio = 1 - (1/(Math.exp(-(distanceRatio - 1) * DistributeCONSTANT) + 1));
+//        return ValueRatio;
+//    }
 
 }

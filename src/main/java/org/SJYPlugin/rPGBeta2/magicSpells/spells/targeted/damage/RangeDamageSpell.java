@@ -97,68 +97,69 @@ public class RangeDamageSpell extends TargetedSpell implements TargetedLocationS
             if (info.noTarget()) return noTarget(info);
             data = info.spellData();
         }
-        return RangeDamage(data) ? new CastResult(PostCastAction.HANDLE_NORMALLY, data) : noTarget(data);
+        return castAtLocation(data);
+//        return RangeDamage(data) ? new CastResult(PostCastAction.HANDLE_NORMALLY, data) : noTarget(data);
     }
 
-    private boolean RangeDamage(SpellData data) {
-        EntityDamageEvent.DamageCause damageCause = EntityDamageEvent.DamageCause.ENTITY_ATTACK;
-
-        Map<LivingEntity, Location> targets = rangeTargetData.getTargets(data, SpellSourceInCenter.get(data), CircleShape.get(data), FailIfNoTargets.get(data),
-                MaxTargets.get(data), VRadius.get(data), HRadius.get(data), MinVRadius.get(data), MinHRadius.get(data));
-
-        boolean isCritical = false;
-
-//        if(!data.target().isValid()) {
-//            return false;
+//    private boolean RangeDamage(SpellData data) {
+//        EntityDamageEvent.DamageCause damageCause = EntityDamageEvent.DamageCause.ENTITY_ATTACK;
+//
+//        Map<LivingEntity, Location> targets = rangeTargetData.getTargets(data, SpellSourceInCenter.get(data), CircleShape.get(data), FailIfNoTargets.get(data),
+//                MaxTargets.get(data), VRadius.get(data), HRadius.get(data), MinVRadius.get(data), MinHRadius.get(data));
+//
+//        boolean isCritical = false;
+//
+////        if(!data.target().isValid()) {
+////            return false;
+////        }
+//
+//        for(LivingEntity target : targets.keySet()) {
+//            if(target.isDead() || !validTargetList.canTarget(data.caster(), target)) {
+//                continue;
+//            }
+//            if(data.caster() instanceof Player) {
+//                if(target instanceof Player) {
+//                    Player offender = (Player) target;
+//                    Player attacker = (Player) data.caster();
+//
+//                    if(this.ForceCritical.get(data)) {
+//                        isCritical = true;
+//                    } else {
+//                        isCritical = playerDamageData.OnCritical(attacker);
+//                    }
+//                    double VirtualFinalDamage = damageComputePVPmain.FinalDamage((Player) attacker, offender,
+//                            DamageBaseType.get(data), DamageMag.get(data), "RANGE", DamageStemType.get(data),
+//                            DamageAttribute.get(data), isCritical);
+//                    SpellApplyDamageEvent event = new SpellApplyDamageEvent((Spell) this, data.caster(), target, VirtualFinalDamage, damageCause, "");
+//                    event.callEvent();
+//                    damageApplyPVPmain.DamagePVP(attacker, offender, VirtualFinalDamage, DamageBaseType.get(data), DamageStemType.get(data),
+//                            "RANGE", DamageAttribute.get(data), isCritical);
+//
+//                    return true;
+//                } else {
+//                    LivingEntity offender = target;
+//                    Player attacker = (Player) data.caster();
+//                    if(this.ForceCritical.get(data)) {
+//                        isCritical = true;
+//                    } else {
+//                        isCritical = playerDamageData.OnCritical(attacker);
+//                    }
+//                    double VirtualFinalDamage = damageComputePVEmain.FinalDamage(attacker, offender, DamageBaseType.get(data), DamageMag.get(data),
+//                            "RANGE", DamageStemType.get(data), DamageAttribute.get(data), isCritical);
+//                    SpellApplyDamageEvent event = new SpellApplyDamageEvent((Spell) this, data.caster(), target, VirtualFinalDamage, damageCause, "");
+//                    event.callEvent();
+//                    damageApplyPVEmain.DamagePVE_Mythic(attacker, offender, VirtualFinalDamage, DamageBaseType.get(data), DamageStemType.get(data),
+//                            "RANGE", DamageAttribute.get(data), isCritical);
+//
+//                    return true;
+//                }
+//            } else {
+//                return false;
+//            }
 //        }
-
-        for(LivingEntity target : targets.keySet()) {
-            if(target.isDead() || !validTargetList.canTarget(data.caster(), target)) {
-                continue;
-            }
-            if(data.caster() instanceof Player) {
-                if(target instanceof Player) {
-                    Player offender = (Player) target;
-                    Player attacker = (Player) data.caster();
-
-                    if(this.ForceCritical.get(data)) {
-                        isCritical = true;
-                    } else {
-                        isCritical = playerDamageData.OnCritical(attacker);
-                    }
-                    double VirtualFinalDamage = damageComputePVPmain.FinalDamage((Player) attacker, offender,
-                            DamageBaseType.get(data), DamageMag.get(data), "RANGE", DamageStemType.get(data),
-                            DamageAttribute.get(data), isCritical);
-                    SpellApplyDamageEvent event = new SpellApplyDamageEvent((Spell) this, data.caster(), target, VirtualFinalDamage, damageCause, "");
-                    event.callEvent();
-                    damageApplyPVPmain.DamagePVP(attacker, offender, VirtualFinalDamage, DamageBaseType.get(data), DamageStemType.get(data),
-                            "RANGE", DamageAttribute.get(data), isCritical);
-
-                    return true;
-                } else {
-                    LivingEntity offender = target;
-                    Player attacker = (Player) data.caster();
-                    if(this.ForceCritical.get(data)) {
-                        isCritical = true;
-                    } else {
-                        isCritical = playerDamageData.OnCritical(attacker);
-                    }
-                    double VirtualFinalDamage = damageComputePVEmain.FinalDamage(attacker, offender, DamageBaseType.get(data), DamageMag.get(data),
-                            "RANGE", DamageStemType.get(data), DamageAttribute.get(data), isCritical);
-                    SpellApplyDamageEvent event = new SpellApplyDamageEvent((Spell) this, data.caster(), target, VirtualFinalDamage, damageCause, "");
-                    event.callEvent();
-                    damageApplyPVEmain.DamagePVE_Mythic(attacker, offender, VirtualFinalDamage, DamageBaseType.get(data), DamageStemType.get(data),
-                            "RANGE", DamageAttribute.get(data), isCritical);
-
-                    return true;
-                }
-            } else {
-                return false;
-            }
-        }
-        playSpellEffects(data);
-        return true;
-    }
+//        playSpellEffects(data);
+//        return true;
+//    }
 
 
 

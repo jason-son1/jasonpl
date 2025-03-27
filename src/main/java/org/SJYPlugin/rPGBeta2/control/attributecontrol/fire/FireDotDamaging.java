@@ -20,30 +20,30 @@ public class FireDotDamaging {
     DamageComputePVEmain damageComputePVEmain = DamageComputePVEmain.getInstance();
     DamageComputeEVPmain damageComputeEVPmain = DamageComputeEVPmain.getInstance();
 
-    public void FireDotDamage(LivingEntity offender, LivingEntity attacker,
-                              int duration, int interval, String DotNam, String BaseType, int mag) {
-        if(offender instanceof Player) {
-            if(attacker instanceof Player) {
-                double FinalDamage = damageComputePVPmain.FinalDamage((Player) attacker, (Player) offender,
-                        BaseType, mag, "DOT", "SPECIALSKILL", "FIRE", false);
-                dotDamageApply.DotDamageApply(attacker, offender, FinalDamage, BaseType,
-                        "DOT", "SPECIALSKILL", "FIRE", false, duration, interval, DotNam);
-            } else {
-                double FinalDamage = damageComputeEVPmain.FinalDamage(attacker, (Player) offender,
-                        BaseType, mag, "DOT", "SPECIALSKILL", "FIRE");
-                dotDamageApply.DotDamageApply(attacker, offender, FinalDamage, BaseType,
-                        "DOT", "SPECIALSKILL", "FIRE", false, duration, interval, DotNam);
-            }
-        } else {
-            if(attacker instanceof Player) {
-                double FinalDamage = damageComputePVEmain.FinalDamage((Player) attacker, offender,
-                        BaseType, mag, "DOT", "SPECIALSKILL", "FIRE", false);
-                dotDamageApply.DotDamageApply(attacker, offender, FinalDamage, BaseType,
-                        "DOT", "SPECIALSKILL", "FIRE", false, duration, interval, DotNam);
-            } else {
-
-            }
-        }
-    }
+//    public void FireDotDamage(LivingEntity offender, LivingEntity attacker,
+//                              int duration, int interval, String DotNam, String BaseType, int mag) {
+//        if(offender instanceof Player) {
+//            if(attacker instanceof Player) {
+//                double FinalDamage = damageComputePVPmain.FinalDamage((Player) attacker, (Player) offender,
+//                        BaseType, mag, "DOT", "SPECIALSKILL", "FIRE", false);
+//                dotDamageApply.DotDamageApply(attacker, offender, FinalDamage, BaseType,
+//                        "DOT", "SPECIALSKILL", "FIRE", false, duration, interval, DotNam);
+//            } else {
+//                double FinalDamage = damageComputeEVPmain.FinalDamage(attacker, (Player) offender,
+//                        BaseType, mag, "DOT", "SPECIALSKILL", "FIRE");
+//                dotDamageApply.DotDamageApply(attacker, offender, FinalDamage, BaseType,
+//                        "DOT", "SPECIALSKILL", "FIRE", false, duration, interval, DotNam);
+//            }
+//        } else {
+//            if(attacker instanceof Player) {
+//                double FinalDamage = damageComputePVEmain.FinalDamage((Player) attacker, offender,
+//                        BaseType, mag, "DOT", "SPECIALSKILL", "FIRE", false);
+//                dotDamageApply.DotDamageApply(attacker, offender, FinalDamage, BaseType,
+//                        "DOT", "SPECIALSKILL", "FIRE", false, duration, interval, DotNam);
+//            } else {
+//
+//            }
+//        }
+//    }
 
 }

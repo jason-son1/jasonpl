@@ -1,5 +1,6 @@
 package org.SJYPlugin.rPGBeta2.control.damagecontrol.evp;
 
+import org.SJYPlugin.rPGBeta2.data.damage.DamageModifiers;
 import org.SJYPlugin.rPGBeta2.data.mobdata.damagedata.MythicMobDamageData;
 import org.SJYPlugin.rPGBeta2.data.playerdata.damagedata.PlayerDamageData;
 import org.SJYPlugin.rPGBeta2.util.config.ConfigUtilStat2;
@@ -16,11 +17,11 @@ public class DamageComputeEVPmain {
     PlayerDamageData playerDamageData = PlayerDamageData.getInstance();
 
 
-    public double FinalDamage(LivingEntity attacker, Player offender, String DamageBaseType ,Integer magnification, String RootDamageType, String StemDamageType, String Attribute) {
+    public double FinalDamage(DamageModifiers damageModifiers) {
 
-        Double normalDamgeCorr = NormalDamageCorrection(attacker, offender, DamageBaseType, magnification, RootDamageType, StemDamageType, Attribute);
-        Double finaldef = mythicMobDamageData.MobFinalDef(attacker, offender);
-        Double DefMag = mythicMobDamageData.MobDefMag(attacker, finaldef, DamageBaseType);
+        Double normalDamgeCorr = NormalDamageCorrection(damageModifiers);
+        Double finaldef = mythicMobDamageData.MobFinalDef(damageModifiers);
+        Double DefMag = mythicMobDamageData.MobDefMag(damageModifiers, finaldef);
 
 //        Integer AttackerLevel = configUtilStat2.getLevel(attacker);
 //        Integer OffenderLevel = configUtilStat2.getLevel(offender);
@@ -30,23 +31,23 @@ public class DamageComputeEVPmain {
         return normalDamgeCorr*DefMag;
     }
 
-    public double NormalDamageCorrection(LivingEntity attacker, Player offender, String DamageBaseType ,Integer magnification, String RootDamageType, String StemDamageType, String Attribute) {
-        Double normalDamage = NormalDamage(attacker, offender, DamageBaseType, magnification, RootDamageType, StemDamageType, Attribute);
-        Double mag = mythicMobDamageData.DamageTypeMag(attacker, RootDamageType, StemDamageType);
+    public double NormalDamageCorrection(DamageModifiers damageModifiers) {
+        Double normalDamage = NormalDamage(damageModifiers);
+        Double mag = mythicMobDamageData.DamageTypeMag(damageModifiers);
         return normalDamage*mag;
     }
 
-    public double NormalDamage(LivingEntity attacker, Player offender, String DamageBaseType , Integer magnification, String RootDamageType, String StemDamageType, String Attribute) {
-        double FinalDamageValue = mythicMobDamageData.MobBaseDamageValue(attacker, DamageBaseType);
+    public double NormalDamage(DamageModifiers damageModifiers) {
+        double FinalDamageValue = mythicMobDamageData.MobBaseDamageValue(damageModifiers);
         int attUp, attRes;
         double AttDamMag;
 
-        attUp = mythicMobDamageData.MobAttUp(attacker, Attribute);
-        attRes = playerDamageData.PlayerAttResist(offender, Attribute);
+        attUp = mythicMobDamageData.MobAttUp(damageModifiers);
+        attRes = playerDamageData.PlayerAttResist(damageModifiers);
 
         AttDamMag = playerDamageData.AttDamageMagControl(attUp, attRes);
 
-        return (FinalDamageValue*(magnification/100) + FinalDamageValue*(magnification/100)*AttDamMag);
+        return (FinalDamageValue*(damageModifiers.getMagnification()/100) + FinalDamageValue*(damageModifiers.getMagnification()/100)*AttDamMag);
     }
 
 

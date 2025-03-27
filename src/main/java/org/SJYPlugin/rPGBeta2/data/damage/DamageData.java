@@ -1,4 +1,4 @@
-package org.SJYPlugin.rPGBeta2.data;
+package org.SJYPlugin.rPGBeta2.data.damage;
 
 import java.util.Set;
 
@@ -28,6 +28,9 @@ public class DamageData {
     private static final String DamageBaseType_Defense = "DEF";
     private static final String DamageBaseType_Health = "MAXHP";
     private static final String DamageBaseType_Etc = "ETC";
+
+    private static final DamageModifiers DefaultDamageModifiers = new DamageModifiers(null, null, 0,
+            0, "NULL", "NULL", "NULL", "NULL", false);
 
     public static final Set<String> DamageRootType = Set.of(DamageRootType_NormalSingleAttack,
             DamageRootType_NormalRangeAttack, DamageRootType_DistributeAttack, DamageRootType_DotAttack, DamageRootType_SpreadAttack,
@@ -62,6 +65,10 @@ public class DamageData {
             }
         }
         return "";
+    }
+
+    public DamageModifiers getDefaultDamageModifiers() {
+        return DefaultDamageModifiers;
     }
 
 

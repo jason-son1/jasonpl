@@ -1,6 +1,8 @@
 package org.SJYPlugin.rPGBeta2.customevents.damage;
 
+import org.SJYPlugin.rPGBeta2.data.damage.DamageModifiers;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -8,61 +10,102 @@ import org.bukkit.event.HandlerList;
 public class RPGDamageEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    private final LivingEntity attacker;
-    private final LivingEntity offender;
-    private final double finalDamage;
-    private final String baseType;
-    private final String stemType;
-    private final String rootType;
-    private final String attribute;
-    private final boolean isCritical;
     private final long tiemstamp;
     private boolean cancelled;
 
-    public RPGDamageEvent(LivingEntity attacker, LivingEntity offender, double finalDamage,
-                          String BaseType, String StemType, String RootType, String Attribute, boolean isCritical) {
-        this.attacker = attacker;
-        this.offender = offender;
-        this.finalDamage = finalDamage;
-        this.baseType = BaseType;
-        this.stemType = StemType;
-        this.rootType = RootType;
-        this.attribute = Attribute;
-        this.isCritical = isCritical;
+    private DamageModifiers damageModifiers;
+
+    public RPGDamageEvent(DamageModifiers damageModifiers) {
+        this.damageModifiers = damageModifiers;
         this.tiemstamp = System.currentTimeMillis();
     }
 
     public LivingEntity getAttacker() {
-        return attacker;
+        return damageModifiers.getAttacker();
+    }
+
+    public Player getAttackerPlayer() {
+        return damageModifiers.getAttackerPlayer();
     }
 
     public LivingEntity getOffender() {
-        return offender;
+        return damageModifiers.getOffender();
+    }
+
+    public Player getOffenderPlayer() {
+        return damageModifiers.getOffenderPlayer();
+    }
+
+    public double getDamage() {
+        return damageModifiers.getFinalDamage();
     }
 
     public double getFinalDamage() {
-        return finalDamage;
+        return damageModifiers.getFinalDamage();
     }
 
     public String getBaseType() {
-        return baseType;
+        return damageModifiers.getBaseType();
     }
 
     public String getStemType() {
-        return stemType;
+        return damageModifiers.getStemType();
     }
 
     public String getRootType() {
-        return rootType;
+        return damageModifiers.getRootType();
     }
 
     public String getAttribute() {
-        return attribute;
+        return damageModifiers.getAttribute();
+    }
+
+    public boolean isCritical() {
+        return damageModifiers.isCritical();
+    }
+
+    public DamageModifiers getDamageModifiers() {
+        return damageModifiers;
     }
 
     public long getTimestamp() { return tiemstamp; }
 
-    public boolean isCritical() { return isCritical; }
+    // Setters
+
+    public void setDamageModifiers(DamageModifiers damageModifiers) {
+        this.damageModifiers = damageModifiers;
+    }
+
+    public void setFinalDamage(double damage) {
+        this.damageModifiers.setFinalDamage(damage);
+    }
+
+    public void setBaseType(String baseType) {
+        this.damageModifiers.setBaseType(baseType);
+    }
+
+    public void setStemType(String stemType) {
+        this.damageModifiers.setStemType(stemType);
+    }
+
+    public void setRootType(String rootType) {
+        this.damageModifiers.setRootType(rootType);
+    }
+
+    public void setAttribute(String attribute) {
+        this.damageModifiers.setAttribute(attribute);
+    }
+
+    public void setCritical(boolean isCritical) {
+        this.damageModifiers.setCritical(isCritical);
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.damageModifiers.setTimestamp(timestamp);
+    }
+
+    // Event
+
 
 
     @Override

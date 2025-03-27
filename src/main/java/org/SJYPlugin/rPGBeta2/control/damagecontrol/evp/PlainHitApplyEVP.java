@@ -1,6 +1,7 @@
 package org.SJYPlugin.rPGBeta2.control.damagecontrol.evp;
 
 
+import org.SJYPlugin.rPGBeta2.data.damage.DamageModifiers;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -15,9 +16,9 @@ public class PlainHitApplyEVP {
     DamageApplyEVPmain damageApplyEVPmain = DamageApplyEVPmain.getInstance();
     DamageComputeEVPmain damageComputeEVPmain = DamageComputeEVPmain.getInstance();
 
-    public void PlainHitDamageEVP(LivingEntity attacker, Player offender, String BaseType, Integer mag, String Attribute) {
-        double FinalDamage = damageComputeEVPmain.FinalDamage(attacker, offender, "ATTACK", 100, "NORMAL", "NORMAL","PHYSICS");
-        damageApplyEVPmain.ETCDamageEVP(attacker, offender, FinalDamage, "ATTACK", "NORMAL", "NORMAL", "PHYSICS");
+    public void PlainHitDamageEVP(DamageModifiers damageModifiers) {
+        double FinalDamage = damageComputeEVPmain.FinalDamage(damageModifiers);
+        damageApplyEVPmain.ETCDamageEVP(damageModifiers);
     }
 
 

@@ -2,8 +2,8 @@ package org.SJYPlugin.rPGBeta2.data.playerdata.damagedata;
 
 import org.SJYPlugin.rPGBeta2.control.hpcontrol.ShieldControlPlayer;
 import org.SJYPlugin.rPGBeta2.data.AttributeData;
-import org.SJYPlugin.rPGBeta2.data.DamageData;
-import org.SJYPlugin.rPGBeta2.data.mobdata.damagedata.MythicMobDamageData;
+import org.SJYPlugin.rPGBeta2.data.damage.DamageData;
+import org.SJYPlugin.rPGBeta2.data.damage.DamageModifiers;
 import org.SJYPlugin.rPGBeta2.data.playerdata.buffdata.PlayerMobTypeDamageBuffData;
 import org.SJYPlugin.rPGBeta2.data.playerdata.buffdata.PlayerRootDamageBuffData;
 import org.SJYPlugin.rPGBeta2.data.playerdata.buffdata.PlayerStemDamageBuffData;
@@ -42,30 +42,30 @@ public class PlayerDamageData {
     private final double attributeResistCONSTANT = 1.0;
 
 
-    public double playerShiledPass(double finaldamage, Player offender) {
-        if(shieldControlPlayer.ExistShield(offender)) {
-            double ShieldValue = shieldControlPlayer.GetShield(offender);
-            if(finaldamage <= ShieldValue) {
-                shieldControlPlayer.DownShield(offender, finaldamage);
+    public double playerShiledPass(DamageModifiers damageModifiers) {
+        if(shieldControlPlayer.ExistShield(damageModifiers.getOffenderPlayer())) {
+            double ShieldValue = shieldControlPlayer.GetShield(damageModifiers.getOffenderPlayer());
+            if(damageModifiers.getFinalDamage() <= ShieldValue) {
+                shieldControlPlayer.DownShield(damageModifiers.getOffenderPlayer(), damageModifiers.getFinalDamage());
                 return 0;
             } else {
-                shieldControlPlayer.DownShield(offender, finaldamage);
-                return finaldamage - ShieldValue;
+                shieldControlPlayer.DownShield(damageModifiers.getOffenderPlayer(), damageModifiers.getFinalDamage());
+                return damageModifiers.getFinalDamage() - ShieldValue;
             }
         } else {
-            return finaldamage;
+            return damageModifiers.getFinalDamage();
         }
     }
 
 
 
-    public boolean OnCritical(Player attacker) {
-        double Critical = configUtilStat2.getCriPer(attacker);
+    public boolean OnCritical(DamageModifiers damageModifiers) {
+        double Critical = configUtilStat2.getCriPer(damageModifiers.getAttackerPlayer());
         return random.nextDouble() < (Critical / 100);
     }
 
-    public double CriticalDamage(Player attacker) {
-        return (configUtilStat2.getCriDam(attacker))/100;
+    public double CriticalDamage(DamageModifiers damageModifiers) {
+        return (configUtilStat2.getCriDam(damageModifiers.getAttackerPlayer()))/100;
     }
 
     public double AttDamageMagControl(Integer attUp, Integer attRes) {
@@ -83,23 +83,24 @@ public class PlayerDamageData {
         }
     }
 
-    public double PlayerFinalDef(Player attacker, Player offender) {
-        double Def = configUtilStat2.getDef(offender);
-        double IgnDef = configUtilStat2.getIgnDef(attacker);
-        return Def - Def*(IgnDef/100);
-    }
 
-    public double PlayerFinalDef(Player attacker, LivingEntity offender) {
-        double Def = mobData.getMobDef(offender);
-        double IgnDef = configUtilStat2.getIgnDef(attacker);
-        return Def - Def*(IgnDef/100);
+    public double PlayerFinalDef(DamageModifiers damageModifiers) {
+        if(damageModifiers.getOffender() instanceof Player) {
+            double Def = configUtilStat2.getDef(damageModifiers.getOffenderPlayer());
+            double IgnDef = configUtilStat2.getIgnDef(damageModifiers.getAttackerPlayer());
+            return Def - Def*(IgnDef/100);
+        } else {
+            double Def = mobData.getMobDef(damageModifiers.getOffender());
+            double IgnDef = configUtilStat2.getIgnDef(damageModifiers.getAttackerPlayer());
+            return Def - Def*(IgnDef/100);
+        }
     }
 
 
     private final double finalDefMagCONSTANT = 1.0;
 
-    public double PlayerDefMag(Player attacker, double finaldef, String DamageBaseType) {
-        double FinaldamageValue = PlayerBaseDamageValue(attacker, DamageBaseType);
+    public double PlayerDefMag(DamageModifiers damageModifiers, double finaldef) {
+        double FinaldamageValue = PlayerBaseDamageValue(damageModifiers);
         double FinalDef = finaldef;
         if(FinalDef < FinaldamageValue) {
             double ex = Math.exp(-1*finalDefMagCONSTANT*(FinaldamageValue-FinalDef + Math.log(1.2)));
@@ -110,17 +111,15 @@ public class PlayerDamageData {
         }
     }
 
-    public double PlayerBaseDamageValue(Player attacker, String DamageBaseType) {
-        Set<String> DamageBaseSet = damageData.getDamgeTypeSet("DamageBaseType");
-        if(DamageBaseSet.contains(DamageBaseType)) {
-
-            if(DamageBaseType.equalsIgnoreCase("ATTACK")) {
-                return configUtilStat2.getAtc(attacker)*damageData.BaseCorrectionCONSTANT_Attack;
-            } else if(DamageBaseType.equalsIgnoreCase("DEF")) {
-                return configUtilStat2.getDef(attacker)*damageData.BaseCorrectionCONSTANT_Def;
-            } else if(DamageBaseType.equalsIgnoreCase("MAXHP")) {
-                return configUtilStat2.getMaxHP(attacker)*damageData.BaseCorrectionCONSTANT_HP;
-            } else if(DamageBaseType.equalsIgnoreCase("ETC")) {
+    public double PlayerBaseDamageValue(DamageModifiers damageModifiers) {
+        if(damageData.getDamgeTypeSet("DamageBaseType").contains(damageModifiers.getBaseType())) {
+            if(damageModifiers.getBaseType().equalsIgnoreCase("ATTACK")) {
+                return configUtilStat2.getAtc(damageModifiers.getAttackerPlayer())*damageData.BaseCorrectionCONSTANT_Attack;
+            } else if(damageModifiers.getBaseType().equalsIgnoreCase("DEF")) {
+                return configUtilStat2.getDef(damageModifiers.getAttackerPlayer())*damageData.BaseCorrectionCONSTANT_Def;
+            } else if(damageModifiers.getBaseType().equalsIgnoreCase("MAXHP")) {
+                return configUtilStat2.getMaxHP(damageModifiers.getAttackerPlayer())*damageData.BaseCorrectionCONSTANT_HP;
+            } else if(damageModifiers.getBaseType().equalsIgnoreCase("ETC")) {
                 return 0;
             } else {
                 return 0;
@@ -130,39 +129,36 @@ public class PlayerDamageData {
         }
     }
 
-    public int PlayerAttUp(Player attacker, String Attribute) {
-        Set<String> AttList = attributeData.getAttList();
-        if(AttList.contains(Attribute)) {
-            return configUtilStat3.getAttUp(attacker).getOrDefault(Attribute, 0);
+    public int PlayerAttUp(DamageModifiers damageModifiers) {
+        if(attributeData.getAttList().contains(damageModifiers.getAttribute())) {
+            return configUtilStat3.getAttUp(damageModifiers.getAttackerPlayer()).getOrDefault(damageModifiers.getAttribute(), 0);
         } else {
             return 0;
         }
     }
 
-
-    public int PlayerAttResist(Player attacker, String Attribute) {
-        Set<String> AttList = attributeData.getAttList();
-        if(AttList.contains(Attribute)) {
-            return configUtilStat3.getAttResist(attacker).getOrDefault(Attribute, 0);
+    public int PlayerAttResist(DamageModifiers damageModifiers) {
+        if(attributeData.getAttList().contains(damageModifiers.getAttribute())) {
+            return configUtilStat3.getAttResist(damageModifiers.getOffenderPlayer()).getOrDefault(damageModifiers.getAttribute(), 0);
         } else {
             return 0;
         }
     }
 
-    public double DamageTypeMag(Player attacker, String RootDamageType, String StemDamageType) {
+    public double DamageTypeMag(DamageModifiers damageModifiers) {
 
-        Map<String, Integer> RootBuff = playerRootDamageBuffData.getBuffData(attacker);
-        Map<String, Integer> StemBuff = playerStemDamageBuffData.getBuffData(attacker);
+        Map<String, Integer> RootBuff = playerRootDamageBuffData.getBuffData(damageModifiers.getAttackerPlayer());
+        Map<String, Integer> StemBuff = playerStemDamageBuffData.getBuffData(damageModifiers.getAttackerPlayer());
 
-        int RootBuffValue = RootBuff.getOrDefault(RootDamageType, 0);
-        int StemBuffValue = StemBuff.getOrDefault(StemDamageType, 0);
+        int RootBuffValue = RootBuff.getOrDefault(damageModifiers.getRootType(), 0);
+        int StemBuffValue = StemBuff.getOrDefault(damageModifiers.getStemType(), 0);
 
         return (1 + (double) StemBuffValue/100)*(1 + (double) RootBuffValue/100);
     }
 
-    public double MobTypeMag(Player attacker, String MobType) {
+    public double MobTypeMag(DamageModifiers damageModifiers, String MobType) {
 
-        Map<String, Integer> MobBuff = playerMobTypeDamageBuffData.getBuffData(attacker);
+        Map<String, Integer> MobBuff = playerMobTypeDamageBuffData.getBuffData(damageModifiers.getAttackerPlayer());
 
         int MobBuffValue = MobBuff.getOrDefault(MobType, 0);
 
