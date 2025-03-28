@@ -1,6 +1,6 @@
 package org.SJYPlugin.rPGBeta2.util.config;
 
-import org.SJYPlugin.rPGBeta2.data.AttributeData;
+import org.SJYPlugin.rPGBeta2.data.attribute.AttributeData;
 import org.bukkit.entity.Player;
 
 import java.util.*;

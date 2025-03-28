@@ -1,4 +1,4 @@
-package org.SJYPlugin.rPGBeta2.data;
+package org.SJYPlugin.rPGBeta2.data.attribute;
 
 import java.util.Set;
 

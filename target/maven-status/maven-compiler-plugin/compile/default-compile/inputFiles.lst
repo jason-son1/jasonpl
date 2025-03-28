@@ -6,6 +6,7 @@ E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\cont
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\control\damagecontrol\evp\DamageApplyEVPmain.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\control\damagecontrol\evp\DamageComputeEVPmain.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\control\damagecontrol\evp\PlainHitApplyEVP.java
+E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\control\damagecontrol\GeneralDamageApply.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\control\damagecontrol\plainhit\PlainHitSpeed.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\control\damagecontrol\pve\DamageApplyPVEmain.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\control\damagecontrol\pve\DamageComputePVEmain.java
@@ -18,17 +19,17 @@ E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\cont
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\control\hpcontrol\RecoverControl.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\control\hpcontrol\ShieldControlMob.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\control\hpcontrol\ShieldControlPlayer.java
-E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\customevents\attribute\AttributeGaugeEvent.java
+E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\customevents\attribute\AttributeApplyEvent.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\customevents\damage\PlayerDieEvent.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\customevents\damage\RPGDamageEvent.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\customevents\player\PlayerChangeHPEvent.java
-E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\data\AttributeData.java
+E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\data\attribute\AttDamageDeBuff.java
+E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\data\attribute\AttributeData.java
+E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\data\attribute\AttributeModifiers.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\data\ClassData.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\data\damage\DamageData.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\data\damage\DamageModifiers.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\data\damage\PutDamageModifiers.java
-E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\data\generaldata\debuffdata\AttDamageDeBuff.java
-E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\data\generaldata\debuffdata\AttributtAccessData.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\data\generaldata\debuffdata\DotDamageDeBuff.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\data\mobdata\buffdata\MythicMobRootDamageBuffData.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\data\mobdata\buffdata\MythicMobStemDamageBuffData.java
@@ -46,6 +47,7 @@ E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\list
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\listeners\damage\PlayerDieListener.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\listeners\damage\RPGDamageDisplayListener.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\listeners\EntityDamagebyEntityListener.java
+E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\listeners\EntityDamageListener.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\listeners\MythicMobSpawnListener.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\listeners\player\PlayerHPChangeListener.java
 E:\Minecraft\minecraft plugin\RPGBeta2\src\main\java\org\SJYPlugin\rPGBeta2\listeners\player\PlayerMoveListener.java

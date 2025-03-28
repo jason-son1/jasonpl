@@ -1,6 +1,7 @@
 package org.SJYPlugin.rPGBeta2.control.damagecontrol.dot;
 
 import org.SJYPlugin.rPGBeta2.RPGBeta2;
+import org.SJYPlugin.rPGBeta2.control.damagecontrol.GeneralDamageApply;
 import org.SJYPlugin.rPGBeta2.control.damagecontrol.pve.DamageApplyPVEmain;
 import org.SJYPlugin.rPGBeta2.control.damagecontrol.pvp.DamageApplyPVPmain;
 import org.SJYPlugin.rPGBeta2.data.damage.DamageModifiers;
@@ -20,17 +21,37 @@ public class DotDamageApply {
     DotDamageDeBuff dotDamageDeBuff = DotDamageDeBuff.getInstance();
     DamageApplyPVPmain damageApplyPVPmain = DamageApplyPVPmain.getInstance();
     DamageApplyPVEmain damageApplyPVEmain = DamageApplyPVEmain.getInstance();
+    GeneralDamageApply generalDamageApply = GeneralDamageApply.getInstance();
 
     public void DotDamageApply(DamageModifiers damageModifiers,
                                int duration, int interval, String DotName) {
         LivingEntity attacker = damageModifiers.getAttacker();
         LivingEntity offender = damageModifiers.getOffender();
-        if(offender.isDead() || offender == null) {
+        if(offender.isDead()) {
             return;
         }
 
         if(attacker == null) {
-            return;
+            dotDamageDeBuff.setBuffData(offender, DotName, duration);
+            new BukkitRunnable() {
+                int ticks = 0;
+                @Override
+                public void run() {
+                    dotDamageDeBuff.ControlBuffData(offender, DotName, -interval);
+                    if (ticks >= duration) {
+                        dotDamageDeBuff.RemoveBuffData(offender, DotName);
+                        this.cancel();
+                        return;
+                    }
+                    if(dotDamageDeBuff.getBuffData(offender).containsKey(DotName)) {
+                        generalDamageApply.DamageApply(damageModifiers);
+                    } else {
+                        this.cancel();
+                        return;
+                    }
+                    ticks += interval;
+                }
+            }.runTaskTimer(RPGBeta2.getInstance(), 0, interval);
         }
 
         if(offender instanceof Player) {

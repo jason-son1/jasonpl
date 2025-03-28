@@ -29,6 +29,10 @@ public class DamageData {
     private static final String DamageBaseType_Health = "MAXHP";
     private static final String DamageBaseType_Etc = "ETC";
 
+    private static final String DamageCauseType_SpellDamage = "SPELL_DAMAGE";
+    private static final String DamageCauseType_SkillDamage = "SKILL_DAMAGE";
+    private static final String DamageCauseType_WeaponDamage = "WEAPON_DAMAGE";
+
     private static final DamageModifiers DefaultDamageModifiers = new DamageModifiers(null, null, 0,
             0, "NULL", "NULL", "NULL", "NULL", false);
 

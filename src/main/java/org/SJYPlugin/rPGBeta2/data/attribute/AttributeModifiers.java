@@ -1,27 +1,35 @@
-package org.SJYPlugin.rPGBeta2.data.generaldata.debuffdata;
+package org.SJYPlugin.rPGBeta2.data.attribute;
 
 import org.bukkit.entity.LivingEntity;
 
 import java.util.UUID;
 
-public class AttributtAccessData {
+public class AttributeModifiers {
 
-    private String attributeName;
+    private String attributeType;
+    private int attributeValue;
     private long timestamp;
     private UUID CauseEntity;
     private String cause;
     private int GaugeValue;
 
-    public AttributtAccessData(String attributeName, long timestamp, LivingEntity livingEntity, String cause, int GaugeValue) {
-        this.attributeName = attributeName;
+    public AttributeModifiers(String attributeType, long timestamp, LivingEntity livingEntity, String cause,
+                              int ApplyGaugeValue, int attributeValue) {
+        this.attributeType = attributeType;
+        this.attributeValue = attributeValue;
         this.timestamp = timestamp;
         this.CauseEntity = livingEntity.getUniqueId();
         this.cause = cause;
-        this.GaugeValue = GaugeValue;
+        this.GaugeValue = ApplyGaugeValue;
+
     }
 
-    public String getAttributeName() {
-        return attributeName;
+    public String getAttributeType() {
+        return attributeType;
+    }
+
+    public int getAttributeValue() {
+        return attributeValue;
     }
 
     public long getTimestamp() {
@@ -40,8 +48,12 @@ public class AttributtAccessData {
         return GaugeValue;
     }
 
-    public void setAttributeName(String attributeName) {
-        this.attributeName = attributeName;
+    public void setAttributeName(String attributeType) {
+        this.attributeType = attributeType;
+    }
+
+    public void setAttributeValue(int attributeValue) {
+        this.attributeValue = attributeValue;
     }
 
     public void setTimestamp(long timestamp) {

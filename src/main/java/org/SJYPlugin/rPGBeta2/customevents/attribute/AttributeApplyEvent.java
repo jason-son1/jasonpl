@@ -1,28 +1,25 @@
 package org.SJYPlugin.rPGBeta2.customevents.attribute;
 
+import org.SJYPlugin.rPGBeta2.data.attribute.AttributeModifiers;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class AttributeGaugeEvent extends Event {
+public class AttributeApplyEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
     private final LivingEntity offender;
 
-    private final String attributeName;
-
-    private final int gaugeValue;
+    private final AttributeModifiers attributeModifiers;
 
     private final boolean isGaugeFull;
 
 
-    public AttributeGaugeEvent(LivingEntity offender,
-                               String attributeName, int gaugeValue, boolean isGaugeFull) {
+    public AttributeApplyEvent(LivingEntity offender, AttributeModifiers attributeModifiers, boolean isGaugeFull) {
         this.offender = offender;
-        this.attributeName = attributeName;
-        this.gaugeValue = gaugeValue;
+        this.attributeModifiers = attributeModifiers;
         this.isGaugeFull = isGaugeFull;
     }
 
@@ -30,12 +27,8 @@ public class AttributeGaugeEvent extends Event {
         return offender;
     }
 
-    public String getAttributeName() {
-        return attributeName;
-    }
-
-    public int getGaugeValue() {
-        return gaugeValue;
+    public AttributeModifiers getAttributeModifiers() {
+        return attributeModifiers;
     }
 
     public boolean isGaugeFull() {

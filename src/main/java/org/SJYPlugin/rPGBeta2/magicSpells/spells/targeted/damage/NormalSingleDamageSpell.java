@@ -69,9 +69,10 @@ public class NormalSingleDamageSpell extends TargetedSpell implements TargetedEn
         EntityDamageEvent.DamageCause damageCause = EntityDamageEvent.DamageCause.ENTITY_ATTACK;
 
         DamageModifiers damageModifiers = putDamageModifiers.putDamageModifiers(DamageData.getInstance().getDefaultDamageModifiers(),
-                data.caster(), data.target(), 0, DamageBaseType.get(data), DamageStemType.get(data), "NORMAL",
+                data.caster(), data.target(), 0, DamageBaseType.get(data), DamageStemType.get(data), 0,"NORMAL",
                 DamageAttribute.get(data), false);
 
+        damageModifiers.setMagnification(DamageMag.get(data));
         boolean isCritical = false;
 
         if(!data.target().isValid()) {

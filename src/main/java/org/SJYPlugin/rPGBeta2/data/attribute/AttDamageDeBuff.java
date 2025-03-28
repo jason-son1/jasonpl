@@ -1,6 +1,5 @@
-package org.SJYPlugin.rPGBeta2.data.generaldata.debuffdata;
+package org.SJYPlugin.rPGBeta2.data.attribute;
 
-import org.SJYPlugin.rPGBeta2.data.AttributeData;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;
@@ -17,25 +16,26 @@ public class AttDamageDeBuff {
 
     private static final long Expiration_time = 1000 * 30;
 
-    private final Map<UUID, Map<String, AttributtAccessData>> attDamageDeBuffData = new HashMap<>();
+    private final Map<UUID, Map<String, AttributeModifiers>> attDamageDeBuffData = new HashMap<>();
 
-    public void setBuffData(LivingEntity livingEntity, String attributeName, long timestamp,
-                            LivingEntity causeEntity, String cause, int GaugeValue) {
+    public void setBuffData(LivingEntity livingEntity, String attributeType, AttributeModifiers attributeModifiers) {
         cleanupOldData(livingEntity);
         attDamageDeBuffData.computeIfAbsent(livingEntity.getUniqueId(), k -> new HashMap<>())
-                .put(attributeName, new AttributtAccessData(attributeName, timestamp, causeEntity, cause , GaugeValue));
+                .put(attributeType, attributeModifiers);
     }
 
-    public AttributtAccessData getBuffData(LivingEntity livingEntity, String attributeName) {
+    public AttributeModifiers getBuffData(LivingEntity livingEntity, String attributeName) {
+        cleanupOldData(livingEntity);
         return attDamageDeBuffData.getOrDefault(livingEntity.getUniqueId(), new HashMap<>()).get(attributeName);
     }
 
-    public Map<String, AttributtAccessData> getBuffData(LivingEntity livingEntity) {
+    public Map<String, AttributeModifiers> getBuffData(LivingEntity livingEntity) {
+        cleanupOldData(livingEntity);
         return attDamageDeBuffData.getOrDefault(livingEntity.getUniqueId(), new HashMap<>());
     }
 
     public void removeBuffData(LivingEntity livingEntity, String attributeName) {
-        Map<String, AttributtAccessData> attributes = attDamageDeBuffData.get(livingEntity.getUniqueId());
+        Map<String, AttributeModifiers> attributes = attDamageDeBuffData.get(livingEntity.getUniqueId());
         if (attributes != null) {
             attributes.remove(attributeName);
             if (attributes.isEmpty()) {

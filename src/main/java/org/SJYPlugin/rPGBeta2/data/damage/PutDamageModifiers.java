@@ -1,6 +1,6 @@
 package org.SJYPlugin.rPGBeta2.data.damage;
 
-import org.SJYPlugin.rPGBeta2.data.AttributeData;
+import org.SJYPlugin.rPGBeta2.data.attribute.AttributeData;
 import org.bukkit.entity.LivingEntity;
 
 public class PutDamageModifiers {
@@ -15,7 +15,7 @@ public class PutDamageModifiers {
     AttributeData attributeData = AttributeData.getInstance();
 
     public DamageModifiers putDamageModifiers(DamageModifiers damageModifiers, LivingEntity attacker, LivingEntity offender,
-                                              double finalDamage, String baseType, String stemType,
+                                              double finalDamage, String baseType, String stemType, int Maginficaion,
                                               String rootType, String attribute, boolean isCritical) {
         damageModifiers.setAttacker(attacker);
         damageModifiers.setOffender(offender);
@@ -46,6 +46,7 @@ public class PutDamageModifiers {
         } else {
             damageModifiers.setAttribute("NULL");
         }
+        damageModifiers.setMagnification(Maginficaion);
 
         damageModifiers.setCritical(isCritical);
 

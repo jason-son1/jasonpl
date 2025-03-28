@@ -70,7 +70,9 @@ public class AdditionalDamageSpell extends TargetedSpell implements TargetedEnti
 
         DamageModifiers damageModifiers = putDamageModifiers.putDamageModifiers(DamageData.getInstance().getDefaultDamageModifiers(),
                 data.caster(), data.target(), 0, DamageBaseType.get(data),
-                DamageStemType.get(data), "ADDITIONAL", DamageAttribute.get(data), false);
+                DamageStemType.get(data), 0,"ADDITIONAL", DamageAttribute.get(data), false);
+
+        damageModifiers.setMagnification(DamageMag.get(data));
 
         boolean isCritical = false;
 

@@ -1,7 +1,7 @@
 package org.SJYPlugin.rPGBeta2.data.playerdata.damagedata;
 
 import org.SJYPlugin.rPGBeta2.control.hpcontrol.ShieldControlPlayer;
-import org.SJYPlugin.rPGBeta2.data.AttributeData;
+import org.SJYPlugin.rPGBeta2.data.attribute.AttributeData;
 import org.SJYPlugin.rPGBeta2.data.damage.DamageData;
 import org.SJYPlugin.rPGBeta2.data.damage.DamageModifiers;
 import org.SJYPlugin.rPGBeta2.data.playerdata.buffdata.PlayerMobTypeDamageBuffData;
@@ -10,12 +10,10 @@ import org.SJYPlugin.rPGBeta2.data.playerdata.buffdata.PlayerStemDamageBuffData;
 import org.SJYPlugin.rPGBeta2.mythicMobs.mob.mobdata.MobData;
 import org.SJYPlugin.rPGBeta2.util.config.ConfigUtilStat2;
 import org.SJYPlugin.rPGBeta2.util.config.ConfigUtilStat3;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 public class PlayerDamageData {
 

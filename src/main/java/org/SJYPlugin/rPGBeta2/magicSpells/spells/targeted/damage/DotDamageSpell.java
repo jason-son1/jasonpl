@@ -80,9 +80,10 @@ public class DotDamageSpell extends TargetedSpell implements TargetedEntitySpell
         EntityDamageEvent.DamageCause damageCause = EntityDamageEvent.DamageCause.ENTITY_ATTACK;
 
         DamageModifiers damageModifiers = putDamageModifiers.putDamageModifiers(DamageData.getInstance().getDefaultDamageModifiers(),
-                data.caster(), data.target(), 0, DamageBaseType.get(data), DamageStemType.get(data), "DOT",
+                data.caster(), data.target(), 0, DamageBaseType.get(data), DamageStemType.get(data), 0,"DOT",
                 DamageAttribute.get(data), false);
 
+        damageModifiers.setMagnification(DamageMag.get(data));
         boolean isCritical = false;
 
         if(!data.target().isValid()) {

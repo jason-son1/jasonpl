@@ -40,6 +40,9 @@ public class EntityDamagebyEntityListener implements Listener {
     }
 
     private void PVEDamaging(EntityDamageByEntityEvent event, Player attacker, LivingEntity entity) {
+        if(attacker == null) {
+            return;
+        }
         if(damageCausePersistantData.containsData(attacker, "CustomDamageCause_PVE")) {
             if(damageCausePersistantData.getData(attacker, "CustomDamageCause_PVE") != null) {
                 if(damageCausePersistantData.getData(attacker, "CustomDamageCause_PVE").equalsIgnoreCase("SPELL_DAMAGE")) {

@@ -63,7 +63,9 @@ public class MythicDamageMechanic extends DamagingMechanic implements ITargetedE
 
         DamageModifiers damageModifiers = putDamageModifiers.putDamageModifiers(DamageData.getInstance().getDefaultDamageModifiers(),
                 null, null, 0,
-                DamageBaseType, DamageStemType, DamageRootType, DamageAttribute, false);
+                DamageBaseType, DamageStemType, 0,DamageRootType, DamageAttribute, false);
+
+        damageModifiers.setMagnification(DamageMag);
 
         double VirtualFinalDamage;
         if(target.isLiving()) {

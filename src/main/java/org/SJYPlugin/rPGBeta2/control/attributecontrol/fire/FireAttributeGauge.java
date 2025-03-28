@@ -1,6 +1,7 @@
 package org.SJYPlugin.rPGBeta2.control.attributecontrol.fire;
 
-import org.SJYPlugin.rPGBeta2.customevents.attribute.AttributeGaugeEvent;
+import org.SJYPlugin.rPGBeta2.customevents.attribute.AttributeApplyEvent;
+import org.SJYPlugin.rPGBeta2.data.attribute.AttributeModifiers;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;
@@ -18,8 +19,7 @@ public class FireAttributeGauge {
     private final Map<UUID, Integer> fireAttributeGauge = new HashMap<>();
 
     public void InitializeFireAttributeGauge(LivingEntity livingEntity) {
-        if(!fireAttributeGauge.containsKey(livingEntity.getUniqueId()) ||
-         fireAttributeGauge == null || fireAttributeGauge.get(livingEntity.getUniqueId()) == null) {
+        if(!fireAttributeGauge.containsKey(livingEntity.getUniqueId()) || fireAttributeGauge.get(livingEntity.getUniqueId()) == null) {
             fireAttributeGauge.put(livingEntity.getUniqueId(), 0);
         }
     }
@@ -29,20 +29,21 @@ public class FireAttributeGauge {
     }
 
     public void setFireAttributeGauge(LivingEntity livingEntity, int value) {
-        InitializeFireAttributeGauge(livingEntity);
-        if(value < 1000) {
-            fireAttributeGauge.put(livingEntity.getUniqueId(), value);
-        } else {
-            AttributeGaugeEvent attributeGaugeEvent = new AttributeGaugeEvent(livingEntity, "FIRE", value, true);
-            attributeGaugeEvent.callEvent();
-            fireAttributeGauge.put(livingEntity.getUniqueId(), 0);
-        }
+        fireAttributeGauge.put(livingEntity.getUniqueId(), value);
     }
 
-    public void ControlFireAttributeGauge(LivingEntity livingEntity, int changevalue) {
+    public void controlFireAttributeGauge(LivingEntity livingEntity, AttributeModifiers attributeModifiers) {
         InitializeFireAttributeGauge(livingEntity);
         int PreValue = fireAttributeGauge.get(livingEntity.getUniqueId());
-        setFireAttributeGauge(livingEntity, PreValue + changevalue);
+        if(PreValue + attributeModifiers.getGaugeValue() < 1000) {
+            AttributeApplyEvent attributeApplyEvent = new AttributeApplyEvent(livingEntity, attributeModifiers, false);
+            attributeApplyEvent.callEvent();
+            fireAttributeGauge.put(livingEntity.getUniqueId(), PreValue + attributeModifiers.getGaugeValue());
+        } else {
+            AttributeApplyEvent attributeApplyEvent = new AttributeApplyEvent(livingEntity, attributeModifiers, true);
+            attributeApplyEvent.callEvent();
+            fireAttributeGauge.put(livingEntity.getUniqueId(), 0);
+        }
     }
 
 

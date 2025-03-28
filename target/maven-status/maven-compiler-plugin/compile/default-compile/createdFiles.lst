@@ -8,6 +8,9 @@ org\SJYPlugin\rPGBeta2\listeners\damage\RPGDamageDisplayListener.class
 org\SJYPlugin\rPGBeta2\magicSpells\spells\buff\MobTypeDamageBuffSpell.class
 org\SJYPlugin\rPGBeta2\listeners\player\PlayerRespawnListener.class
 org\SJYPlugin\rPGBeta2\magicSpells\spells\targeted\damage\DotDamageSpell.class
+org\SJYPlugin\rPGBeta2\data\attribute\AttributeModifiers.class
+org\SJYPlugin\rPGBeta2\control\damagecontrol\GeneralDamageApply.class
+org\SJYPlugin\rPGBeta2\listeners\EntityDamageListener.class
 org\SJYPlugin\rPGBeta2\magicSpells\spells\buff\StemDamagebuffSpell.class
 org\SJYPlugin\rPGBeta2\mythicMobs\mob\control\MobDataControlGet.class
 org\SJYPlugin\rPGBeta2\mythicMobs\mob\mobdata\MobData.class
@@ -16,8 +19,8 @@ org\SJYPlugin\rPGBeta2\control\damagecontrol\evp\DamageComputeEVPmain.class
 org\SJYPlugin\rPGBeta2\control\damagecontrol\plainhit\PlainHitSpeed.class
 org\SJYPlugin\rPGBeta2\StatTestCommand.class
 org\SJYPlugin\rPGBeta2\util\hologram\PlayerHPHologram$1.class
+org\SJYPlugin\rPGBeta2\data\attribute\AttributeData.class
 org\SJYPlugin\rPGBeta2\util\hologram\PlayerHPHologram.class
-org\SJYPlugin\rPGBeta2\data\AttributeData.class
 org\SJYPlugin\rPGBeta2\StandSpawn.class
 org\SJYPlugin\rPGBeta2\data\playerdata\damagedata\PlayerDamageData.class
 org\SJYPlugin\rPGBeta2\magicSpells\spells\targeted\damage\AdditionalDamageSpell.class
@@ -26,9 +29,9 @@ org\SJYPlugin\rPGBeta2\magicSpells\spells\targeted\damage\DiffusionDamageSpell.c
 org\SJYPlugin\rPGBeta2\listeners\EntityDamagebyEntityListener.class
 org\SJYPlugin\rPGBeta2\data\playerdata\statdata\PlayerLowStat.class
 org\SJYPlugin\rPGBeta2\mythicMobs\mechanics\StemDamageBuff.class
+org\SJYPlugin\rPGBeta2\customevents\attribute\AttributeApplyEvent.class
 org\SJYPlugin\rPGBeta2\mythicMobs\mechanics\RootDamageBuff.class
 org\SJYPlugin\rPGBeta2\magicSpells\spells\targeted\damage\DistributeDamageSpell.class
-org\SJYPlugin\rPGBeta2\data\generaldata\debuffdata\AttributtAccessData.class
 org\SJYPlugin\rPGBeta2\control\damagecontrol\dot\DotDamageApply$1.class
 org\SJYPlugin\rPGBeta2\control\hpcontrol\HPControl.class
 org\SJYPlugin\rPGBeta2\customevents\damage\RPGDamageEvent.class
@@ -38,9 +41,7 @@ org\SJYPlugin\rPGBeta2\control\damagecontrol\pvp\DamageComputePVPmain.class
 org\SJYPlugin\rPGBeta2\listeners\PlayerJoinListener.class
 org\SJYPlugin\rPGBeta2\util\hologram\DamageHologram$1.class
 org\SJYPlugin\rPGBeta2\listeners\player\PlayerMoveListener.class
-org\SJYPlugin\rPGBeta2\customevents\attribute\AttributeGaugeEvent.class
 org\SJYPlugin\rPGBeta2\control\damagecontrol\evp\PlainHitApplyEVP.class
-org\SJYPlugin\rPGBeta2\data\generaldata\debuffdata\AttDamageDeBuff.class
 org\SJYPlugin\rPGBeta2\listeners\player\PlayerHPChangeListener.class
 org\SJYPlugin\rPGBeta2\magicSpells\spells\targeted\area\CustomAreaEffectSpell.class
 org\SJYPlugin\rPGBeta2\data\damage\DamageModifiers.class
@@ -50,6 +51,7 @@ org\SJYPlugin\rPGBeta2\control\damagecontrol\pve\DamageComputePVEmain.class
 org\SJYPlugin\rPGBeta2\control\damagecontrol\pvp\DamageApplyPVPmain.class
 org\SJYPlugin\rPGBeta2\control\damagecontrol\evp\DamageApplyEVPmain.class
 org\SJYPlugin\rPGBeta2\control\attributecontrol\fire\FireDotDamaging.class
+org\SJYPlugin\rPGBeta2\data\attribute\AttDamageDeBuff.class
 org\SJYPlugin\rPGBeta2\magicSpells\data\RangeTargetData.class
 org\SJYPlugin\rPGBeta2\control\attributecontrol\fire\FireAttControl.class
 org\SJYPlugin\rPGBeta2\customevents\damage\PlayerDieEvent.class
@@ -84,6 +86,7 @@ org\SJYPlugin\rPGBeta2\control\attributecontrol\AttributeApply.class
 org\SJYPlugin\rPGBeta2\util\hologram\DamageHologram.class
 org\SJYPlugin\rPGBeta2\data\mobdata\buffdata\MythicMobStemDamageBuffData.class
 org\SJYPlugin\rPGBeta2\data\playerdata\statdata\PlayerAttStat.class
+org\SJYPlugin\rPGBeta2\control\damagecontrol\dot\DotDamageApply$3.class
 org\SJYPlugin\rPGBeta2\listeners\MythicMobSpawnListener.class
 org\SJYPlugin\rPGBeta2\magicSpells\spells\buff\RootDamagebuffSpell.class
 org\SJYPlugin\rPGBeta2\util\persistantdata\DamageCausePersistantData.class

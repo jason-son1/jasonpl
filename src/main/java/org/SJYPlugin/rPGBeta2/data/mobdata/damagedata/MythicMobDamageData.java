@@ -2,7 +2,7 @@ package org.SJYPlugin.rPGBeta2.data.mobdata.damagedata;
 
 import io.lumine.mythic.api.mobs.MythicMob;
 import org.SJYPlugin.rPGBeta2.control.hpcontrol.ShieldControlMob;
-import org.SJYPlugin.rPGBeta2.data.AttributeData;
+import org.SJYPlugin.rPGBeta2.data.attribute.AttributeData;
 import org.SJYPlugin.rPGBeta2.data.damage.DamageData;
 import org.SJYPlugin.rPGBeta2.data.damage.DamageModifiers;
 import org.SJYPlugin.rPGBeta2.data.mobdata.buffdata.MythicMobRootDamageBuffData;
@@ -10,11 +10,8 @@ import org.SJYPlugin.rPGBeta2.data.mobdata.buffdata.MythicMobStemDamageBuffData;
 import org.SJYPlugin.rPGBeta2.mythicMobs.mob.control.MobDataControlGet;
 import org.SJYPlugin.rPGBeta2.mythicMobs.mob.mobdata.MobData;
 import org.SJYPlugin.rPGBeta2.util.config.ConfigUtilStat2;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 
 import java.util.Map;
-import java.util.Set;
 
 public class MythicMobDamageData {
 

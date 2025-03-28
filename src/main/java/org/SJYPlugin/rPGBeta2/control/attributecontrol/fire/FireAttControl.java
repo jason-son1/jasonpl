@@ -1,16 +1,17 @@
 package org.SJYPlugin.rPGBeta2.control.attributecontrol.fire;
 
-import org.SJYPlugin.rPGBeta2.customevents.attribute.AttributeGaugeEvent;
-import org.SJYPlugin.rPGBeta2.data.generaldata.debuffdata.AttDamageDeBuff;
-import org.SJYPlugin.rPGBeta2.data.generaldata.debuffdata.AttributtAccessData;
+import org.SJYPlugin.rPGBeta2.customevents.attribute.AttributeApplyEvent;
+import org.SJYPlugin.rPGBeta2.data.attribute.AttDamageDeBuff;
+import org.SJYPlugin.rPGBeta2.data.attribute.AttributeModifiers;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import java.rmi.server.UID;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FireAttControl implements Listener {
 
@@ -24,11 +25,11 @@ public class FireAttControl implements Listener {
     FireAttributeGauge fireAttributeGauge = FireAttributeGauge.getInstance();
     FireDotDamaging fireDotDamaging = FireDotDamaging.getInstance();
 
-    public Set<AttributtAccessData> getFireAttributeData(LivingEntity livingEntity) {
+    public Set<AttributeModifiers> getFireAttributeData(LivingEntity livingEntity) {
         if(attDamageDeBuff.getBuffData(livingEntity, "FIRE") != null) {
-            Set<AttributtAccessData> fireAttributeData = Set.of();
-            attDamageDeBuff.getBuffData(livingEntity).forEach((attributeName, data) -> {
-                if(attributeName.equalsIgnoreCase("FIRE")) {
+            Set<AttributeModifiers> fireAttributeData = new HashSet<>();
+            attDamageDeBuff.getBuffData(livingEntity).forEach((attributeType, data) -> {
+                if(attributeType.equalsIgnoreCase("FIRE")) {
                     fireAttributeData.add(data);
                 }
             });
@@ -38,31 +39,35 @@ public class FireAttControl implements Listener {
         }
     }
 
-
-    public void FireApply(LivingEntity offender, LivingEntity attacker, long timestamp ,String cause, int GaugeValue) {
-        Set<AttributtAccessData> fireAttributeData = getFireAttributeData(offender);
-        final int[] preGuageValue = {0};
+    public void PreSet(LivingEntity livingEntity) {
+        Set<AttributeModifiers> fireAttributeData = getFireAttributeData(livingEntity);
+        int OriginGaugeValue = fireAttributeGauge.getFireAttributeGauge(livingEntity);
+        AtomicInteger GaugeValue = new AtomicInteger();
         if(fireAttributeData != null) {
-            fireAttributeData.forEach(data -> {
-                preGuageValue[0] += data.getGaugeValue();
-            });
-            attDamageDeBuff.setBuffData(offender, "FIRE", timestamp, attacker, cause, GaugeValue);
-            fireAttributeGauge.setFireAttributeGauge(offender, preGuageValue[0] + GaugeValue);
+            fireAttributeData.forEach(data -> GaugeValue.addAndGet(data.getGaugeValue()));
+            if(OriginGaugeValue != GaugeValue.get()) {
+                fireAttributeGauge.setFireAttributeGauge(livingEntity, GaugeValue.get());
+            }
         } else {
-            attDamageDeBuff.setBuffData(offender, "FIRE", timestamp, attacker, cause, GaugeValue);
-            fireAttributeGauge.setFireAttributeGauge(offender, GaugeValue);
+            fireAttributeGauge.InitializeFireAttributeGauge(livingEntity);
         }
     }
 
 
-    @EventHandler
-    public void FireListener(AttributeGaugeEvent event) {
-        if(event.getAttributeName().equalsIgnoreCase("FIRE")) {
-            if(event.isGaugeFull()) {
-                Set<AttributtAccessData> fireAttributeData = getFireAttributeData(event.getOffender());
-                AttributtAccessData latestData = null;
+    public void FireApply(LivingEntity offender, AttributeModifiers attributeModifiers) {
+        PreSet(offender);
+        fireAttributeGauge.controlFireAttributeGauge(offender, attributeModifiers);
+    }
 
-                for (AttributtAccessData data : fireAttributeData) {
+
+    @EventHandler
+    public void FireListener(AttributeApplyEvent event) {
+        if(event.getAttributeModifiers().getAttributeType().equalsIgnoreCase("FIRE")) {
+            if(event.isGaugeFull()) {
+                Set<AttributeModifiers> fireAttributeData = getFireAttributeData(event.getOffender());
+                AttributeModifiers latestData = null;
+
+                for (AttributeModifiers data : fireAttributeData) {
                     if (latestData == null || data.getTimestamp() > latestData.getTimestamp()) {
                         latestData = data;
                     }
